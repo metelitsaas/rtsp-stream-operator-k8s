@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: rtsp-stream-operator
+  name: rtsp-stream-operator
+  namespace: dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rtsp-stream-operator
+  template:
+    metadata:
+      labels:
+        app: rtsp-stream-operator
+    spec:
+      serviceAccountName: rtsp-stream-operator
+      containers:
+        - name: rtsp-stream-operator
+          image: rtsp-stream-operator:0.1.0
