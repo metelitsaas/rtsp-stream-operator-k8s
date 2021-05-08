@@ -10,8 +10,6 @@ spec:
     listKind: RTSPStreamList
     plural: rtspstreams
     singular: rtspstream
-    shortNames:
-      - rs
   versions:
     - name: v1
       served: true
