@@ -1,15 +1,11 @@
-from kubernetes import config, client, watch
+from rtsp_stream_operator import RTSPStreamOperator
 from utils.logger import logger
 
 
 def main():
 
-    config.load_incluster_config()
-    core_v1_api = client.CoreV1Api()
-    event_watcher = watch.Watch()
-
-    for event in event_watcher.stream(core_v1_api.list_namespace):
-        logger.info(f"""Event: {event['type']} {event['object'].kind} {event['object'].metadata.name}""")
+    rtsp_stream_operator = RTSPStreamOperator()
+    rtsp_stream_operator.run()
 
 
 if __name__ == '__main__':
