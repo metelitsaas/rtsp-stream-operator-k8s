@@ -19,3 +19,10 @@ spec:
       containers:
         - name: rtsp-stream-operator
           image: rtsp-stream-operator:0.1.0
+          env:
+            - name: CRD_GROUP
+              value: 'operators.example.com'
+            - name: CRD_VERSION
+              value: 'v1'
+            - name: CRD_PLURAL
+              value: 'rtspstreams'
