@@ -1,3 +1,4 @@
+TODO: Add tests
 #### Run minikube
 ```
 minikube start --vm-driver=virtualbox --cpus 2
@@ -14,6 +15,6 @@ kubectl apply -f kubernetes/namespace.yaml
 kubectl apply -f kubernetes/authorization/service_account.yaml
 kubectl apply -f kubernetes/authorization/cluster_role.yaml
 kubectl apply -f kubernetes/authorization/cluster_role_binding.yaml
-kubectl apply -f kubernetes/deployment.yaml
 kubectl apply -f kubernetes/crd.yaml
+kubectl apply -f kubernetes/deployment.yaml
 ```
