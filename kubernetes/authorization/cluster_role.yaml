@@ -19,3 +19,7 @@ rules:
     resources:
       - namespaces
     verbs: ["get", "watch", "list"]
+  - apiGroups: ["operators.example.com"]
+    resources:
+      - rtspstreams
+    verbs: ["*"]
