@@ -1,7 +1,7 @@
 from abc import ABC
-from kubernetes import client, watch
 from threads.abstract_thread import AbstractThread
 from utils.logger import logger
+from kubernetes import client, watch
 
 
 class EventListenerThread(AbstractThread, ABC):
@@ -12,11 +12,14 @@ class EventListenerThread(AbstractThread, ABC):
         """
         Thread listens events in loop
         """
-        core_v1_api = client.CoreV1Api()
+        custom_object_api = client.CustomObjectsApi()
         event_watcher = watch.Watch()
 
         while not self._shutdown_event.isSet():
-            for event in event_watcher.stream(core_v1_api.list_namespace):
+            for event in event_watcher.stream(custom_object_api.list_cluster_custom_object,
+                                              self._object_metadata['crd_group'],
+                                              self._object_metadata['crd_version'],
+                                              self._object_metadata['crd_plural']):
                 logger.info(f"Event: {event['type']} "
                             f"{event['object'].kind} "
                             f"{event['object'].metadata.name}")
