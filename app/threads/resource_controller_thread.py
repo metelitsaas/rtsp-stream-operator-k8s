@@ -3,6 +3,7 @@ from abc import ABC
 from utils.kubernetes_functions import list_cluster_crd_object
 from utils.logger import logger
 from threads.abstract_thread import AbstractThread
+from kubernetes import client
 
 SLEEP_SEC = 5
 
@@ -26,7 +27,6 @@ class ResourceControllerThread(AbstractThread, ABC):
         Checks resources existence
         """
         object_list = list_cluster_crd_object(self._object_metadata)
-        logger.info(f"Resources found: {len(object_list['items'])}")
 
         self._check_deployments(object_list)
         self._check_services(object_list)
@@ -37,16 +37,34 @@ class ResourceControllerThread(AbstractThread, ABC):
         """
         pass
 
-    def _check_deployments(self, object_list: dict) -> None:
+    @staticmethod
+    def _check_deployments(object_list: dict) -> None:
         """
         Checks deployments existence and creates them if necessary
         :param object_list: dict of CRD objects
         """
-        pass
+        apps_v1_api = client.AppsV1Api()
 
-    def _check_services(self, object_list: dict) -> None:
+        for resource in object_list['items']:
+
+            name = resource['metadata']['name']
+            namespace = resource['metadata']['namespace']
+
+            deployments = apps_v1_api.read_namespaced_deployment(name, namespace)
+            logger.info(f"Deployments found: {deployments}")
+
+    @staticmethod
+    def _check_services(object_list: dict) -> None:
         """
         Checks services existence and creates them if necessary
         :param object_list: dict of CRD objects
         """
-        pass
+        core_v1_api = client.CoreV1Api()
+
+        for resource in object_list['items']:
+
+            name = resource['metadata']['name']
+            namespace = resource['metadata']['namespace']
+
+            services = core_v1_api.read_namespaced_service(name, namespace)
+            logger.info(f"Services found: {services}")
