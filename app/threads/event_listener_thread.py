@@ -15,7 +15,7 @@ class EventListenerThread(AbstractThread, ABC):
         custom_object_api = client.CustomObjectsApi()
         event_watcher = watch.Watch()
 
-        while not self._shutdown_event.isSet():
+        while not self._shutdown_event.is_set():
             for event in event_watcher.stream(custom_object_api.list_cluster_custom_object,
                                               self._object_metadata['crd_group'],
                                               self._object_metadata['crd_version'],

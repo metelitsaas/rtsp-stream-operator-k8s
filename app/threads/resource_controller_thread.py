@@ -16,7 +16,7 @@ class ResourceControllerThread(AbstractThread, ABC):
         """
         Thread checks resources in loop
         """
-        while not self._shutdown_event.isSet():
+        while not self._shutdown_event.is_set():
             self._check_resources()
             self._collect_garbage()
 

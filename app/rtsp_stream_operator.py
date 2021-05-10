@@ -33,7 +33,7 @@ class RTSPStreamOperator:
         ResourceControllerThread(self._object_metadata, self._shutdown_event).start()
         EventListenerThread(self._object_metadata, self._shutdown_event).start()
 
-        while not self._shutdown_event.isSet():
+        while not self._shutdown_event.is_set():
             time.sleep(self._sleep_period)
 
     @staticmethod
