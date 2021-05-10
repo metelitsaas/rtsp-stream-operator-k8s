@@ -8,8 +8,7 @@ class TestRTSPStreamOperator:
     """
     RTSPStreamOperator test class
     """
-    @staticmethod
-    def test_run_configuration_exception():
+    def test_run_configuration_exception(self):
         """
         Test run function
         Check load config exception if cluster unavailable
@@ -21,8 +20,7 @@ class TestRTSPStreamOperator:
         with pytest.raises(ConfigException):
             RTSPStreamOperator(crd_group, crd_version, crd_plural)
 
-    @staticmethod
-    def test_run_connection_exception(mocker):
+    def test_run_connection_exception(self, mocker):
         """
         Test run function
         Check child threads are killed due to connection exceptions
@@ -38,3 +36,11 @@ class TestRTSPStreamOperator:
         rtsp_stream_operator.run()
 
         assert threading.active_count() == 1
+
+    @pytest.mark.skip(reason="Add test later")
+    def test_run_event_occurred(self, mocker):
+        """
+        Test run function
+        Check function finish due to an event occurred
+        """
+        pass
