@@ -30,11 +30,19 @@ class RTSPStreamOperator:
         """
         Run resource controller and event listener threads in loop
         """
-        ResourceControllerThread(self._object_metadata, self._shutdown_event).start()
-        EventListenerThread(self._object_metadata, self._shutdown_event).start()
+        resource_controller_thread = ResourceControllerThread(self._object_metadata,
+                                                              self._shutdown_event)
+        event_listener_thread = EventListenerThread(self._object_metadata,
+                                                    self._shutdown_event)
+
+        resource_controller_thread.start()
+        event_listener_thread.start()
 
         while not self._shutdown_event.is_set():
             time.sleep(self._sleep_period)
+
+        resource_controller_thread.join()
+        event_listener_thread.join()
 
     @staticmethod
     def _load_configuration() -> None:
