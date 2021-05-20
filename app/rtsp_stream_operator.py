@@ -2,7 +2,6 @@ import time
 from threading import Event
 from threads.event_listener_thread import EventListenerThread
 from threads.resource_controller_thread import ResourceControllerThread
-from kubernetes import config
 
 
 class RTSPStreamOperator:
@@ -24,7 +23,6 @@ class RTSPStreamOperator:
         }
         self._sleep_period = sleep_period
         self._shutdown_event = Event()
-        self._load_configuration()
 
     def run(self) -> None:
         """
@@ -32,8 +30,7 @@ class RTSPStreamOperator:
         """
         resource_controller_thread = ResourceControllerThread(self._object_metadata,
                                                               self._shutdown_event)
-        event_listener_thread = EventListenerThread(self._object_metadata,
-                                                    self._shutdown_event)
+        event_listener_thread = EventListenerThread(self._object_metadata, self._shutdown_event)
 
         resource_controller_thread.start()
         event_listener_thread.start()
@@ -43,10 +40,3 @@ class RTSPStreamOperator:
 
         resource_controller_thread.join()
         event_listener_thread.join()
-
-    @staticmethod
-    def _load_configuration() -> None:
-        """
-        Load K8S connect configuration
-        """
-        config.load_incluster_config()
