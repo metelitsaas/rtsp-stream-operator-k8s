@@ -1,4 +1,3 @@
-TODO: Add tests
 #### Run minikube
 ```
 minikube start --vm-driver=virtualbox --cpus 2
