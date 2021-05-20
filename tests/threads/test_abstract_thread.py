@@ -3,6 +3,7 @@ import threading
 from threading import Event
 from abc import ABC
 import pytest
+import threads.abstract_thread
 from threads.abstract_thread import AbstractThread
 
 
@@ -59,8 +60,10 @@ class TestAbstractThread:
         with pytest.raises(TypeError):
             incorrect_object_abstract_thread(object_metadata, shutdown_event)
 
-    def test_thread_end_exception(self, set_up, exception_object_abstract_thread):
+    def test_thread_end_exception(self, set_up, mocker, exception_object_abstract_thread):
         """Test correct thread end due to unhandled exception"""
+        mocker.patch.object(threads.abstract_thread, 'KubernetesClient', return_value=None)
+
         object_metadata, shutdown_event = set_up
         exception_object_abstract_thread(object_metadata, shutdown_event).start()
         time.sleep(1)
@@ -68,8 +71,10 @@ class TestAbstractThread:
         assert threading.active_count() == 1
         assert shutdown_event.is_set() is True
 
-    def test_thread_end_process(self, set_up, correct_object_abstract_thread):
+    def test_thread_end_process(self, set_up, mocker, correct_object_abstract_thread):
         """ Test correct thread end due to exit from processing function"""
+        mocker.patch.object(threads.abstract_thread, 'KubernetesClient', return_value=None)
+
         object_metadata, shutdown_event = set_up
         correct_object_abstract_thread(object_metadata, shutdown_event).start()
         time.sleep(1)

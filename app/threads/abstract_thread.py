@@ -1,6 +1,7 @@
 from threading import Thread, Event
 from abc import ABCMeta, abstractmethod
 from utils.logger import logger
+from utils.kubernetes_client import KubernetesClient
 
 
 class AbstractThread(Thread, metaclass=ABCMeta):
@@ -16,6 +17,7 @@ class AbstractThread(Thread, metaclass=ABCMeta):
         Thread.__init__(self, name=self.__class__.__name__, daemon=True, target=self._run)
         self._object_metadata = object_metadata
         self._shutdown_event = shutdown_event
+        self._kubernetes_client = KubernetesClient()
 
     def _run(self) -> None:
         """
