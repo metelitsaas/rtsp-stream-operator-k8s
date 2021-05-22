@@ -29,7 +29,10 @@ spec:
             spec:
               type: object
               properties:
-                authentification:
+                replicas:
+                  type: integer
+                  format: int32
+                authentication:
                   type: object
                   properties:
                     login:
@@ -81,29 +84,3 @@ spec:
                                 - type: string
                               pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
                               x-kubernetes-int-or-string: true
-                      ports:
-                        type: array
-                        items:
-                          type: object
-                          required:
-                            - containerPort
-                          properties:
-                            name:
-                              type: string
-                            protocol:
-                              type: string
-                              default: TCP
-                            containerPort:
-                              type: integer
-                              format: int32
-                      env:
-                        type: array
-                        items:
-                          type: object
-                          required:
-                            - name
-                          properties:
-                            name:
-                              type: string
-                            value:
-                              type: string
