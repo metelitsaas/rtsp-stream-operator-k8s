@@ -17,3 +17,8 @@ kubectl apply -f kubernetes/authorization/cluster_role_binding.yaml
 kubectl apply -f kubernetes/crd.yaml
 kubectl apply -f kubernetes/deployment.yaml
 ```
+
+#### Deploy RTSP Stream instance
+```
+kubectl apply -f kubernetes/rtsp-stream-example.yaml
+```

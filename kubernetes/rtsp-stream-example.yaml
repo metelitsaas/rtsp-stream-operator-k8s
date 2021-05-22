@@ -1,0 +1,27 @@
+# TODO: Add authentication by secret object
+# TODO: Fix unnecessary limits.cpu and requests.cpu quotation marks
+apiVersion: operators.example.com/v1
+kind: RTSPStream
+metadata:
+  name: rtsp-stream-example
+  namespace: dev
+spec:
+  replicas: 3
+  authentication:
+    login: "test_user"
+    password: "test_pass"
+  servicePort:
+    name: rtsp
+    protocol: TCP
+    port: 8555
+  containers:
+    - name: rtsp-stream
+      image: ullaakut/rtspatt:latest
+      imagePullPolicy: Always
+      resources:
+        limits:
+          cpu: "0.5"
+          memory: 256Mi
+        requests:
+          cpu: "0.25"
+          memory: 128Mi
