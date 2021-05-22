@@ -1,9 +1,7 @@
 import time
 from abc import ABC
-from utils.kubernetes_functions import list_cluster_crd_object
 from utils.logger import logger
 from threads.abstract_thread import AbstractThread
-from kubernetes import client
 
 SLEEP_SEC = 5
 
@@ -26,7 +24,8 @@ class ResourceControllerThread(AbstractThread, ABC):
         """
         Checks resources existence
         """
-        object_list = list_cluster_crd_object(self._object_metadata)
+        object_list = self._kubernetes_client.list_cluster_crd_object(self._object_metadata)
+        logger.info(f"CRD objects: {object_list}")
 
         self._check_deployments(object_list)
         self._check_services(object_list)
@@ -37,34 +36,28 @@ class ResourceControllerThread(AbstractThread, ABC):
         """
         pass
 
-    @staticmethod
-    def _check_deployments(object_list: dict) -> None:
+    def _check_deployments(self, object_list: dict) -> None:
         """
         Checks deployments existence and creates them if necessary
         :param object_list: dict of CRD objects
         """
-        apps_v1_api = client.AppsV1Api()
-
         for resource in object_list['items']:
 
             name = resource['metadata']['name']
             namespace = resource['metadata']['namespace']
 
-            deployments = apps_v1_api.read_namespaced_deployment(name, namespace)
-            logger.info(f"Deployments found: {deployments}")
+            deployment = self._kubernetes_client.get_deployment(name, namespace)
+            logger.info(f"Deployment found: {deployment}")
 
-    @staticmethod
-    def _check_services(object_list: dict) -> None:
+    def _check_services(self, object_list: dict) -> None:
         """
         Checks services existence and creates them if necessary
         :param object_list: dict of CRD objects
         """
-        core_v1_api = client.CoreV1Api()
-
         for resource in object_list['items']:
 
             name = resource['metadata']['name']
             namespace = resource['metadata']['namespace']
 
-            services = core_v1_api.read_namespaced_service(name, namespace)
-            logger.info(f"Services found: {services}")
+            service = self._kubernetes_client.get_service(name, namespace)
+            logger.info(f"Service found: {service}")
